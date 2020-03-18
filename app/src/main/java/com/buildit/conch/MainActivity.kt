@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.util.SparseArray
 import android.view.SurfaceHolder
 import android.widget.Toast
@@ -15,6 +16,7 @@ import com.google.android.gms.vision.Detector
 import com.google.android.gms.vision.barcode.Barcode
 import com.google.android.gms.vision.barcode.BarcodeDetector
 import kotlinx.android.synthetic.main.activity_main.*
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
     private val requestCodeCameraPermission = 1001
@@ -52,7 +54,6 @@ override fun onRequestPermissionsResult(
 ) {
     super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     Toast.makeText(applicationContext, requestCode.toString(),Toast.LENGTH_LONG).show()
-
     if(requestCode == requestCodeCameraPermission && grantResults.isNotEmpty()) {
         if(grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             setupControls()
