@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.widget.Button
 import android.util.Log
 import android.content.Context
+import android.graphics.Color
 import java.io.IOException
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -21,10 +22,11 @@ import kotlinx.android.synthetic.main.activity_data_view.*
 class DataViewActivity : AppCompatActivity() {
 
 
-    val numberList: MutableList<String> = ArrayList()
+    val numberList: MutableList<Colors> = ArrayList()
     var page = 1
     var isLoading = false
     val limit = 10
+    var colorCodes: List<Colors> = ArrayList()
 
     lateinit var adapter: NumberAdapter
     lateinit var layoutManager: LinearLayoutManager
@@ -40,9 +42,7 @@ class DataViewActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        layoutManager = LinearLayoutManager(this)
-        recyclerView.layoutManager = layoutManager
-        getPage()
+
 
         recyclerView.addOnScrollListener(object :RecyclerView.OnScrollListener(){
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -64,13 +64,13 @@ class DataViewActivity : AppCompatActivity() {
 
 
     fun getPage() {
-        isLoading = true;
+        isLoading = true
         progressBar.visibility = View.VISIBLE
         val start = (page-1) * limit
         val end = (page) * limit
 
         for(i in start..end) {
-            numberList.add("Itemsss" + i.toString())
+            numberList.add(colorCodes[i])
         }
         Handler().postDelayed({
             if(::adapter.isInitialized) {
@@ -81,12 +81,13 @@ class DataViewActivity : AppCompatActivity() {
             }
             isLoading = false
             progressBar.visibility = View.GONE
-        }, 1000)
+        }, 0)
     }
 
     class NumberAdapter(val activity: DataViewActivity): RecyclerView.Adapter<NumberAdapter.NumberViewHolder>() {
         class NumberViewHolder(v: View): RecyclerView.ViewHolder(v) {
             val tvNumber = v.findViewById<TextView>(R.id.rv_number)
+
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NumberViewHolder {
@@ -98,7 +99,8 @@ class DataViewActivity : AppCompatActivity() {
         }
 
         override fun onBindViewHolder(holder: NumberViewHolder, position: Int) {
-            holder.tvNumber.text = activity.numberList[position]
+            holder.tvNumber.text = activity.numberList[position].name
+            holder.tvNumber.setTextColor(Color.parseColor(activity.numberList[position].hex))
         }
     }
 
@@ -119,8 +121,11 @@ class DataViewActivity : AppCompatActivity() {
 
         val gson = Gson()
         val listColors = object : TypeToken<List<Colors>>() {}.type
-        var colors: List<Colors> = gson.fromJson(jsonFileString, listColors)
-        colors.forEachIndexed { idx, color -> Log.i("data", "> Item $idx:\n$color") }
+        colorCodes = gson.fromJson(jsonFileString, listColors)
+        layoutManager = LinearLayoutManager(this)
+        recyclerView.layoutManager = layoutManager
+        getPage()
+//        colors.forEachIndexed { idx, color -> Log.i("data", "> Item $idx:\n$color") }
 
     }
 }
