@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.buildit.conch">
+
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
 
@@ -8,6 +9,7 @@
     <uses-feature
         android:name="android.hardware.camera"
         android:required="true" />
+
     <application
         android:allowBackup="false"
         android:icon="@mipmap/baseline_waves_black_36"
@@ -15,10 +17,11 @@
         android:roundIcon="@mipmap/baseline_waves_black_36"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".DataViewActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.Fullscreen"></activity>
         <activity
             android:name=".MainActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.Fullscreen"
-            >
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.Fullscreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -1,12 +1,14 @@
 package com.buildit.conch
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.util.SparseArray
 import android.view.SurfaceHolder
+import android.widget.Button
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -26,10 +28,19 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             askForCameraPermission()
         } else {
             setupControls()
+        }
+
+        val button = findViewById<Button>(R.id.moveToDataView)
+        button.setOnClickListener{
+            val intent = Intent(this, DataViewActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+
+            startActivity(intent)
         }
     }
 private fun setupControls() {
@@ -53,7 +64,6 @@ override fun onRequestPermissionsResult(
         grantResults: IntArray
 ) {
     super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-    Toast.makeText(applicationContext, requestCode.toString(),Toast.LENGTH_LONG).show()
     if(requestCode == requestCodeCameraPermission && grantResults.isNotEmpty()) {
         if(grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             setupControls()
