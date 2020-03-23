@@ -111,14 +111,14 @@ class DataViewActivity : AppCompatActivity() {
             holder.tvNumber.setTextColor(Color.parseColor(activity.numberList[position].hex))
 
             val bitmap: Bitmap = Bitmap.createBitmap(800, 800, Bitmap.Config.ARGB_8888)
-            val canvas: Canvas = Canvas(bitmap)
+            val canvas = Canvas(bitmap)
             // oval positions
             val left = 100
             val top = 100
             val right = 800
             val bottom = 800
             // draw oval shape to canvas
-            var shapeDrawable: ShapeDrawable = ShapeDrawable(OvalShape())
+            val shapeDrawable = ShapeDrawable(OvalShape())
             shapeDrawable.setBounds( left, top, right, bottom)
 
             shapeDrawable.paint.color = Color.parseColor(activity.numberList[position].hex)
