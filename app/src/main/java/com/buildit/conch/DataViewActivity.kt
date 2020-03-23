@@ -6,7 +6,13 @@ import android.os.Bundle
 import android.widget.Button
 import android.util.Log
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.ShapeDrawable
+import android.graphics.drawable.shapes.OvalShape
+import android.graphics.drawable.shapes.RectShape
 import java.io.IOException
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -14,6 +20,7 @@ import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -87,6 +94,7 @@ class DataViewActivity : AppCompatActivity() {
     class NumberAdapter(val activity: DataViewActivity): RecyclerView.Adapter<NumberAdapter.NumberViewHolder>() {
         class NumberViewHolder(v: View): RecyclerView.ViewHolder(v) {
             val tvNumber = v.findViewById<TextView>(R.id.rv_number)
+            val tvColor = v.findViewById<ImageView>(R.id.my_image_view)
 
         }
 
@@ -101,6 +109,25 @@ class DataViewActivity : AppCompatActivity() {
         override fun onBindViewHolder(holder: NumberViewHolder, position: Int) {
             holder.tvNumber.text = activity.numberList[position].name
             holder.tvNumber.setTextColor(Color.parseColor(activity.numberList[position].hex))
+
+            val bitmap: Bitmap = Bitmap.createBitmap(800, 800, Bitmap.Config.ARGB_8888)
+            val canvas: Canvas = Canvas(bitmap)
+            // oval positions
+            val left = 100
+            val top = 100
+            val right = 800
+            val bottom = 800
+            // draw oval shape to canvas
+            var shapeDrawable: ShapeDrawable = ShapeDrawable(OvalShape())
+            shapeDrawable.setBounds( left, top, right, bottom)
+
+            shapeDrawable.paint.color = Color.parseColor(activity.numberList[position].hex)
+            shapeDrawable.draw(canvas)
+
+            // now bitmap holds the updated pixels
+
+            // set bitmap as background to ImageView
+            holder.tvColor.setImageBitmap(bitmap)
         }
     }
 
